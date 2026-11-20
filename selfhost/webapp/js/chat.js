@@ -1,0 +1,10 @@
+(function(){
+ const $=id=>document.getElementById(id),body=$('chatBody');let busy=false,loadVersion=0;
+ async function call(action,data={}){const r=await fetch((window.CS_CONFIG.gateway||'')+'/cs-chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,sessionId:window.HospitalSession,...data})});if(!r.ok)throw Error('连接失败，请稍后重试');const j=await r.json();if(!j.ok)throw Error(j.error||'服务暂不可用');return j;}
+ function message(role,text){const row=document.createElement('div');row.className='msg '+(role==='user'?'user':'assistant');const avatar=document.createElement('div');avatar.className='m-avatar';avatar.textContent=role==='user'?'我':'助手';const bubble=document.createElement('div');bubble.className='m-bubble';bubble.textContent=text;row.append(avatar,bubble);body.append(row);body.scrollTop=body.scrollHeight;}
+ async function load(){const v=++loadVersion;try{const r=await call('history');if(v!==loadVersion||busy)return;body.replaceChildren();r.messages.forEach(m=>message(m.role,m.content));}catch(e){if(v!==loadVersion)return;body.replaceChildren();message('assistant',e.message);const retry=document.createElement('button');retry.className='btn secondary retry';retry.textContent='重新连接';retry.onclick=load;body.append(retry);}}
+ async function send(text){text=text.trim();if(busy||!text)return;loadVersion++;busy=true;$('btnSend').disabled=true;$('msgInput').value='';message('user',text);$('convStatus').textContent='正在回复…';try{const r=await call('chat',{message:text});message('assistant',r.reply);}catch(e){message('assistant',e.message);$('msgInput').value=text;}finally{busy=false;$('btnSend').disabled=false;$('convStatus').textContent='随访指引';$('msgInput').focus();}}
+ $('btnSend').onclick=()=>send($('msgInput').value);$('msgInput').onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();send($('msgInput').value);}};
+ document.querySelectorAll('[data-text]').forEach(b=>b.onclick=()=>send(b.dataset.text));
+ $('btnVoiceCall').onclick=()=>window.__openVoiceCall&&window.__openVoiceCall();window.parentChatRefresh=load;load();
+})();

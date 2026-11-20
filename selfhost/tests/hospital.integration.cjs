@@ -1,0 +1,38 @@
+const assert=require('node:assert/strict');
+const {randomUUID}=require('node:crypto');
+const db=require('../server/db'),hospital=require('../server/hospital'),admin=require('../server/admin'),chat=require('../server/hospital-chat');
+const {today}=require('../server/patient-validation');
+async function call(action,data={}){const r=await hospital.main({action,...data});assert.equal(r.ok,true,JSON.stringify(r));return r;}
+(async()=>{
+ assert.match(process.env.DATABASE_URL||'',/\/cs_hospital_qa_20261110$/);
+ await hospital.ensureSchema();await hospital.ensureSchema();await require('../server/accounts').ensureSchema();
+ const request={requestId:randomUUID(),strategy:'skip',rows:[{patient_no:'P-001',name:'测试患者甲',phone:'13800138000',birth_date:'1980-01-01',discharge_date:'2026-10-30',department:'心内科',clinician:'李护士',notes:'保留备注'},{patient_no:'P-002',name:'测试患者乙',phone:'13800138000',department:'骨科'},{patient_no:'P-001',name:'重复',phone:'13900139000'},{patient_no:'P-003',name:'',phone:'123'}]};
+ const imported=await call('patient_import',request);assert.equal(imported.inserted,2);assert.equal(imported.invalid,2);assert.deepEqual(await call('patient_import',request),imported);
+ assert.equal((await hospital.main({action:'patient_import',...request,strategy:'update'})).ok,false);
+ const updated=await call('patient_import',{requestId:randomUUID(),strategy:'update',rows:[{patient_no:'P-001',name:'100%_测试患者',phone:'13900139000'}]});assert.equal(updated.updated,1);
+ const list=await call('patient_list',{keyword:'100%_'});assert.equal(list.total,1);const p=list.list[0];assert.equal(p.notes,'保留备注');assert.equal(p.discharge_date,'2026-10-30');
+ assert.equal((await call('patient_list',{keyword:'%'})).total,1);assert.equal((await call('patient_list',{keyword:"' OR 1=1 --"})).total,0);
+ const concurrent=await Promise.all([1,2].map(()=>call('patient_import',{requestId:randomUUID(),strategy:'skip',rows:[{patient_no:'P-004',name:'并发患者',phone:'13800138000'}]})));assert.equal(concurrent.reduce((s,r)=>s+r.inserted,0),1);
+ await call('patient_save',{id:p.id,patient:{...p,name:'测试患者甲',notes:''}});assert.equal((await call('patient_detail',{id:p.id})).patient.notes,'');
+ const plan={requestId:randomUUID(),patientId:p.id,title:'出院随访',assignedTo:'李护士',channel:'phone',mode:'schedule',offsets:[3,7,30,3],focus:'恢复、用药、复诊'};
+ const made=await call('followup_create',plan);assert.equal(made.created,3);assert.deepEqual(await call('followup_create',plan),made);
+ await call('patient_save',{id:p.id,patient:{...p,discharge_date:'2026-10-31'}});assert.deepEqual(await call('followup_create',plan),made);
+ let detail=await call('patient_detail',{id:p.id});assert.deepEqual(detail.tasks.map(t=>t.due_date).sort(),['2026-11-02','2026-11-06','2026-11-29']);
+ const taskId=made.ids[0],next='2026-11-29';
+ const record={requestId:randomUUID(),taskId,operator:'李护士',notes:'未接听，明日再联系',contact:'unreachable',nextDate:next};
+ await call('followup_record',record);await call('followup_record',record);assert.equal((await call('patient_detail',{id:p.id})).records.length,1);
+ assert.equal((await call('followup_list',{status:'pending'})).list.find(t=>t.id===taskId).status,'pending');
+ assert.equal((await hospital.main({action:'followup_record',...record,requestId:randomUUID(),condition:'stable'})).ok,false);
+ const done={requestId:randomUUID(),taskId,operator:'李护士',notes:'已联系，记录患者反馈。安排再次随访。',contact:'reached',condition:'attention',medication:'issue',appointment:'needed',nextDate:next};
+ await Promise.all([call('followup_record',done),call('followup_record',done)]);
+ detail=await call('patient_detail',{id:p.id});assert.equal(detail.records.length,2);assert.equal(detail.tasks.length,4);
+ assert.equal((await hospital.main({action:'followup_record',...done,requestId:randomUUID()})).ok,false);
+ await call('followup_record',{requestId:randomUUID(),taskId:made.ids[1],operator:'李护士',notes:'患者拒绝本次随访',contact:'declined'});
+ await call('followup_record',{requestId:randomUUID(),taskId:made.ids[2],operator:'李护士',notes:'计划变更，取消此次随访',contact:'cancelled'});
+ assert.equal((await call('followup_records',{condition:'attention'})).total,1);
+ const overview=await call('hospital_overview');assert.equal(overview.totals.patients,3);assert.equal(overview.totals.completed,2);assert.equal(overview.totals.pending,1);
+ assert.equal((await admin.main({action:'patient_list'})).ok,false);const auth=await admin.main({action:'login',username:'admin',password:require('./require-test-password.cjs')()});assert.equal((await admin.main({action:'hospital_overview',token:auth.token})).ok,true);assert.equal((await admin.main({action:'call_process',token:auth.token})).ok,false);
+ const sessionId='h_'+randomUUID();const response=await chat.main({action:'chat',sessionId,message:'复诊需要准备什么？'});assert.equal(response.ok,true);assert.match(response.reply,/出院小结/);assert.match((await chat.main({action:'chat',sessionId,message:'具体怎么做？'})).reply,/出院小结/);
+ assert.match(chat.replyFor('胸痛、呼吸困难',[]),/120/);assert.equal((await chat.main({action:'history',sessionId})).messages.length,4);assert.equal((await chat.main({action:'history',sessionId:'old'})).ok,false);
+ console.log('PASS hospital PostgreSQL: import, shared phone, idempotency, search, edit, date plans, rescheduling, completion, concurrent saves, history, authentication and guidance.');
+})().then(()=>process.exit(0),e=>{console.error(e);process.exit(1);});

@@ -1,0 +1,19 @@
+CREATE TABLE IF NOT EXISTS customers (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(80) NOT NULL,
+  phone VARCHAR(11) NOT NULL UNIQUE CHECK (phone ~ '^1[3-9][0-9]{9}$'),
+  email VARCHAR(254) NOT NULL DEFAULT '',
+  company VARCHAR(120) NOT NULL DEFAULT '',
+  tags VARCHAR(160) NOT NULL DEFAULT '',
+  notes VARCHAR(1000) NOT NULL DEFAULT '',
+  source VARCHAR(120) NOT NULL DEFAULT '',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_customers_updated ON customers (updated_at DESC);
+CREATE TABLE IF NOT EXISTS customer_imports (
+  request_id UUID PRIMARY KEY,
+  payload_hash TEXT NOT NULL,
+  result JSONB NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);

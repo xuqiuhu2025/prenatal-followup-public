@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>随访机器人 · 声音试听</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f8f8;color:#233e48;font-family:"Microsoft YaHei",system-ui,sans-serif;line-height:1.75}main{max-width:840px;margin:0 auto;padding:42px 22px 64px}.eyebrow{font-size:12px;letter-spacing:.13em;color:#087080;font-weight:700}h1{font-size:30px;line-height:1.4;margin:10px 0 12px}p{color:#526b77;margin:8px 0}.sample{background:#e9f4f3;border-left:3px solid #66a9aa;padding:18px 22px;margin:24px 0 28px;border-radius:0 10px 10px 0}.voices{display:grid;grid-template-columns:1fr 1fr;gap:16px}article{background:#fff;border:1px solid #d6e4e7;border-radius:13px;padding:22px;min-width:0}article.recommended{grid-column:1/-1;background:#f7fcfb;border:2px solid #338e91}h2{font-size:18px;margin:0 0 5px}audio{width:100%;margin-top:16px;display:block}.tag{display:inline-block;color:#087080;background:#deefed;padding:2px 10px;border-radius:20px;font-size:12px;margin-bottom:10px}details{margin-top:24px;color:#526b77;font-size:13px}summary{cursor:pointer}a{color:#087080}audio:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #087f8c;outline-offset:4px}@media(max-width:560px){main{padding:24px 16px 40px}h1{font-size:25px}.voices{grid-template-columns:1fr}article{padding:18px}.sample{padding:15px}}
+</style>
+<main>
+ <div class="eyebrow">FOLLOW-UP · VOICE PREVIEW</div>
+ <h1>从容一点，听得更清楚。</h1>
+ <p>默认采用你选的温和普通话女声。用同一段随访话术，对比原声音与新版节奏。</p>
+ <div class="sample">您好，我是中心的AI随访助手。现在方便聊几句吗？这阵子您身体恢复得怎么样？没关系，记不清的内容可以先放一放。</div>
+ <div class="voices">
+  <article class="recommended"><span class="tag">新版默认</span><h2>晓晓 · 舒缓女声</h2><p>比标准语速慢 5%，给对方更从容的听话节奏。</p><audio controls preload="metadata" aria-label="试听新版晓晓舒缓女声" src="recommended.mp3"></audio></article>
+  <article><h2>原设置 · 晓晓女声</h2><p>比标准语速快 4%，用于前后比较。</p><audio controls preload="metadata" aria-label="试听原设置晓晓女声" src="previous.mp3"></audio></article>
+  <article><h2>晓晓 · 更慢一些</h2><p>比标准语速慢 12%，可以比较是否更好听清。</p><audio controls preload="metadata" aria-label="试听更慢的晓晓女声" src="slower.mp3"></audio></article>
+  <article><h2>晓伊 · 女声对比</h2><p>同样慢 5%，主要比较音色差异。</p><audio controls preload="metadata" aria-label="试听晓伊女声" src="xiaoyi.mp3"></audio></article>
+  <article><h2>云希 · 男声对比</h2><p>同样慢 5%，提供另一种声音选择。</p><audio controls preload="metadata" aria-label="试听云希男声" src="yunxi.mp3"></audio></article>
+ </div>
+ <details><summary>关于这组试听</summary><p>样本于 2026-11-13 使用真实语音合成接口生成，内容为通用示例。这里是网页播放的音质，真实电话声音仍需接入线路后验证。选择任意音频播放时，其余音频会暂停。</p><p><a href="samples.json">查看生成参数</a></p></details>
+</main>
+<script>
+document.querySelectorAll('audio').forEach(current=>current.addEventListener('play',()=>{document.querySelectorAll('audio').forEach(other=>{if(other!==current)other.pause();});}));
+window.addEventListener('pagehide',()=>document.querySelectorAll('audio').forEach(audio=>audio.pause()));
+</script>
+</html>

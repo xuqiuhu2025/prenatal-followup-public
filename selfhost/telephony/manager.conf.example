@@ -1,0 +1,14 @@
+; Merge into /etc/asterisk/manager.conf; replace 10.20.30.40 with the app host IP.
+; Do not expose port 5038 to the public internet.
+[general]
+enabled = yes
+webenabled = no
+port = 5038
+bindaddr = 10.20.30.50
+
+[hospital-followup]
+secret = REPLACE_WITH_A_LONG_RANDOM_SECRET
+deny = 0.0.0.0/0.0.0.0
+permit = 10.20.30.40/255.255.255.255
+read = system,call
+write = call,originate

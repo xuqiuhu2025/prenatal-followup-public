@@ -1,0 +1,9 @@
+{
+  "name": "cs-admin",
+  "version": "1.0.0",
+  "description": "智能客服管理后台 API",
+  "main": "index.js",
+  "dependencies": {
+    "@cloudbase/node-sdk": "^3.16.0"
+  }
+}

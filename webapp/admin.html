@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>智能客服 · 管理后台</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
+</head>
+<body>
+  <!-- 登录 -->
+  <div class="login-mask" id="loginMask">
+    <div class="login-card">
+      <div class="icon">📊</div>
+      <h2>智能客服 · 管理后台</h2>
+      <p>请输入管理员配置的管理密码</p>
+      <input id="pwdInput" type="password" placeholder="管理密码" />
+      <div class="err-tip" id="pwdErr" style="text-align:left"></div>
+      <button class="btn" id="btnLogin">登 录</button>
+    </div>
+  </div>
+
+  <div class="admin-shell" id="adminShell" style="display:none">
+    <aside class="side">
+      <div class="logo">🤖 智能客服后台</div>
+      <nav>
+        <a href="#" class="active" data-page="dashboard">📊 数据看板</a>
+        <a href="#" data-page="conversations">💬 对话记录</a>
+        <a href="#" data-page="escalations">🔔 转人工工单</a>
+        <a href="#" data-page="calls">📞 电话随访</a>
+        <a href="#" data-page="faq">📚 FAQ 知识库</a>
+      </nav>
+      <div class="foot">云舟优选 · CloudBase</div>
+    </aside>
+
+    <main class="main">
+      <!-- 看板 -->
+      <section id="page-dashboard">
+        <div class="page-title">数据看板</div>
+        <div class="cards" id="statCards"></div>
+        <div class="grid2">
+          <div class="panel">
+            <h3>最近 7 天对话量</h3>
+            <div class="spark-days" id="dailyChart"></div>
+          </div>
+          <div class="panel">
+            <h3>意图分布（自动路由）</h3>
+            <div class="chart-bars" id="intentChart"></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>用户满意度分布</h3>
+          <div class="chart-bars" id="ratingChart"></div>
+        </div>
+      </section>
+
+      <!-- 对话记录 -->
+      <section id="page-conversations" style="display:none">
+        <div class="page-title">对话记录</div>
+        <div class="drawer">
+          <div class="panel">
+            <div class="filters">
+              <select id="fStatus">
+                <option value="">全部状态</option>
+                <option value="open">服务中</option>
+                <option value="resolved">已解决</option>
+                <option value="escalated">转人工</option>
+                <option value="closed">已关闭</option>
+              </select>
+              <select id="fIntent">
+                <option value="">全部意图</option>
+                <option value="refund">退款</option>
+                <option value="order_query">订单查询</option>
+                <option value="tech_support">技术支持</option>
+                <option value="faq">常见问题</option>
+                <option value="chitchat">闲聊</option>
+                <option value="escalate">转人工</option>
+              </select>
+              <input id="fKeyword" placeholder="会话ID搜索" />
+              <button class="btn-sm" id="btnSearch">查询</button>
+            </div>
+            <table class="tbl">
+              <thead><tr><th>会话</th><th>状态</th><th>最后意图</th><th>最后消息</th><th>评分</th><th>更新时间</th></tr></thead>
+              <tbody id="convTbody"></tbody>
+            </table>
+            <div class="empty-tip" id="convEmpty" style="display:none">暂无对话记录</div>
+          </div>
+          <div class="panel" id="convDetail">
+            <h3>会话详情</h3>
+            <div class="empty-tip">点击左侧会话查看详情</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 转人工工单 -->
+      <section id="page-escalations" style="display:none">
+        <div class="page-title">转人工工单</div>
+        <div class="panel">
+          <table class="tbl">
+            <thead><tr><th>时间</th><th>会话</th><th>转接原因</th><th>状态</th><th>操作</th></tr></thead>
+            <tbody id="escTbody"></tbody>
+          </table>
+          <div class="empty-tip" id="escEmpty" style="display:none">暂无转人工工单</div>
+        </div>
+      </section>
+
+      <!-- 电话随访 -->
+      <section id="page-calls" style="display:none">
+        <div class="page-title">电话随访任务</div>
+        <div class="panel">
+          <div class="filters">
+            <input id="newCallPhone" placeholder="手机号（11位）" maxlength="11" />
+            <input id="newCallPurpose" placeholder="随访目的（如：退款进度回访）" style="flex:1" />
+            <button class="btn-sm" id="btnNewCall">＋ 创建随访任务</button>
+            <button class="btn-sm warn" id="btnProcessAll">⚡ 立即处理排队</button>
+          </div>
+          <table class="tbl">
+            <thead><tr><th>时间</th><th>手机号</th><th>目的</th><th>状态</th><th>外呼话术 / 摘要</th><th>操作</th></tr></thead>
+            <tbody id="callTbody"></tbody>
+          </table>
+          <div class="empty-tip" id="callEmpty" style="display:none">暂无随访任务</div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="page-faq" style="display:none">
+        <div class="page-title">FAQ 知识库</div>
+        <div class="panel">
+          <div class="filters">
+            <button class="btn-sm" id="btnNewFaq">＋ 新增 FAQ</button>
+            <span class="muted">FAQ 将被用于语义检索，命中后作为大模型回答依据</span>
+          </div>
+          <table class="tbl">
+            <thead><tr><th>编号</th><th>分类</th><th>问题</th><th>答案</th><th>关键词</th><th>操作</th></tr></thead>
+            <tbody id="faqTbody"></tbody>
+          </table>
+          <div class="empty-tip" id="faqEmpty" style="display:none">暂无 FAQ</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- FAQ 编辑弹窗 -->
+  <div class="modal-mask" id="faqModal">
+    <div class="modal">
+      <h3 id="faqModalTitle">新增 FAQ</h3>
+      <input id="faqQuestion" placeholder="问题（如：如何修改收货地址）" style="margin-bottom:10px" />
+      <textarea id="faqAnswer" placeholder="答案" rows="4" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:14px;outline:none"></textarea>
+      <input id="faqKeywords" placeholder="关键词，逗号分隔（如：地址,改地址,收货）" style="margin-top:10px" />
+      <input id="faqCategory" placeholder="分类（如：订单/售后/技术）" style="margin-top:10px" />
+      <div class="err-tip" id="faqErr"></div>
+      <div class="row">
+        <button class="btn ghost" id="faqCancel">取消</button>
+        <button class="btn" id="faqSave">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

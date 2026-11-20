@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>云舟优选 · 智能客服</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>" />
+</head>
+<body>
+  <div class="chat-shell">
+    <header class="chat-header">
+      <div class="avatar">🤖</div>
+      <div>
+        <div class="title">云舟优选 · 智能客服</div>
+        <div class="sub">AI 助手小智 在线 · 支持订单查询 / 退款 / 技术支持</div>
+      </div>
+      <div class="status-chip" id="convStatus">智能服务中</div>
+    </header>
+
+    <main class="chat-body" id="chatBody">
+      <div class="empty-tip" id="loadingTip">正在连接客服系统…</div>
+    </main>
+
+    <div class="quick-bar" id="quickBar">
+      <button class="quick-chip" data-text="我想查询订单 SO10001 的物流进度">📦 查询订单</button>
+      <button class="quick-chip" data-text="我要申请退款，订单号 SO10002">💰 申请退款</button>
+      <button class="quick-chip" data-text="App 打不开了，一直闪退，怎么办？">🛠 技术支持</button>
+      <button class="quick-chip" data-text="怎么修改收货地址？">❓ 常见问题</button>
+      <button class="quick-chip call-chip" id="btnCallRequest">📞 预约电话回访</button>
+      <button class="quick-chip" data-text="转人工">👤 转人工客服</button>
+    </div>
+
+    <footer class="chat-input">
+      <input id="msgInput" type="text" placeholder="请输入您的问题…" maxlength="500" autocomplete="off" />
+      <button class="btn" id="btnSend">发送</button>
+    </footer>
+  </div>
+
+  <!-- 电话回访弹窗 -->
+  <div class="modal-mask" id="callModal">
+    <div class="modal">
+      <h3>📞 预约电话回访</h3>
+      <p class="tip">留下您的手机号，客服系统将自动外呼进行随访（演示环境为模拟线路，不会真实拨打）。</p>
+      <input id="callPhone" type="tel" maxlength="11" placeholder="请输入 11 位手机号" />
+      <div class="err-tip" id="callErr"></div>
+      <div class="row">
+        <button class="btn ghost" id="callCancel">取消</button>
+        <button class="btn" id="callSubmit">确认预约</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "cs-call",
+  "version": "1.0.0",
+  "description": "智能客服电话随访：任务队列 + 定时自动外呼处理",
+  "main": "index.js",
+  "dependencies": {
+    "@cloudbase/node-sdk": "^3.16.0"
+  }
+}

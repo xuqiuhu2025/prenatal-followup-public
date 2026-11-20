@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>安和 · 随访服务助手</title>
+  <link rel="stylesheet" href="css/style.css" /><link rel="stylesheet" href="css/workspace.css?v=h1" />
+  <link rel="stylesheet" href="css/hospital.css?v=h1" /><link rel="icon" href="favicon.svg" />
+</head>
+<body class="chat-page"><div class="chat-layout"><aside class="chat-aside"><a class="chat-brand" href="index.html"><span class="brand-mark" data-icon="hospital"></span><span>安和<small>陪伴每一段安心孕程</small></span></a><div class="aside-intro"><div class="eyebrow">PRENATAL CONTINUITY OF CARE</div><h2>从筛查到出生，<br>关怀始终在。</h2><p>了解筛查与诊断，做好随访准备。<br>让孕程的每一步更从容。</p></div><div class="service-list"><div><span data-icon="heart"></span>产前筛查说明</div><div><span data-icon="calendar"></span>转诊与诊断准备</div><div><span data-icon="book"></span>妊娠结局与儿童随访</div><div><span data-icon="mic"></span>自然语音沟通</div></div><div class="aside-footer">连续照护，让关怀更近一点。<br><a class="text-link" href="admin.html">进入医护工作台 <span data-icon="arrow"></span></a></div></aside><main class="chat-main"><div class="chat-topline"><span>安和 / 随访服务助手</span><span>有序随访 · 安心相伴</span></div>
+  <div class="chat-shell">
+    <header class="chat-header">
+      <div class="avatar" data-icon="hospital"></div>
+      <div>
+        <div class="title">安和 · 随访服务助手</div>
+        <div class="sub">产前筛查、诊断准备与结局随访指引</div>
+      </div>
+      <div class="status-chip" id="convStatus">随访指引</div>
+    </header>
+
+    <div class="chat-body" id="chatBody" role="log" aria-label="聊天记录" aria-live="polite">
+      <div class="empty-tip" id="loadingTip">正在连接随访助手…</div>
+    </div>
+
+    <div class="quick-bar" id="quickBar"><button class="quick-chip" data-text="产前筛查高风险意味着什么？"><span data-icon="heart"></span>筛查说明</button><button class="quick-chip" data-text="转诊到产前诊断中心前需要准备什么？"><span data-icon="calendar"></span>诊断准备</button><button class="quick-chip" data-text="羊水穿刺术后随访会了解什么？"><span data-icon="book"></span>术后随访</button><button class="quick-chip" data-text="出生后12周随访会了解什么？"><span data-icon="sheet"></span>结局随访</button><button class="quick-chip" data-text="怎样联系医护团队？"><span data-icon="phone"></span>联系医护</button><button class="quick-chip" id="btnVoiceCall"><span data-icon="mic"></span>语音交流</button></div>
+    <footer class="chat-input">
+      <input id="msgInput" aria-label="输入你的问题" type="text" placeholder="请输入您的问题…" maxlength="1000" autocomplete="off" />
+      <button class="btn" id="btnSend">发送</button>
+    </footer>
+  </div>
+
+<p class="chat-disclaimer">本页面提供一般随访说明，不替代诊疗，也不向医护发送消息。急症请拨打 120 或就近急诊。</p></main></div>
+  <!-- 语音通话浮层 -->
+  <div class="voice-mask" id="voiceOverlay">
+    <div class="voice-panel">
+      <button type="button" class="voice-orb" id="voiceOrb" aria-label="开始或停止录音">
+        <span class="voice-status" id="voiceStatus" aria-live="polite">点击开始</span>
+        <span class="voice-hint" id="voiceHint">点击开始，或长按说话</span>
+      </button>
+      <div class="voice-live" id="voiceLiveText"></div>
+      <div class="voice-controls">
+        <button class="vc-btn" id="voiceHold">按住说话</button>
+        <button class="vc-btn" id="voiceHandsfree">免提模式</button>
+        <button class="vc-btn hangup" id="voiceHangup">挂断</button>
+      </div>
+      <div class="voice-tip">免提模式自动连续对话，助手播放时可直接插话 · 说「挂断」结束 · 语音需要 HTTPS</div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/workspace.js?v=h1"></script><script src="js/hospital-session.js?v=h1"></script><script src="js/chat.js?v=h1"></script>
+  <script src="js/voice.js?v=h2"></script>
+</body>
+</html>

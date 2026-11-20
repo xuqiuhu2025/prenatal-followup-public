@@ -1,0 +1,9 @@
+{
+  "name": "cs-chat",
+  "version": "1.0.0",
+  "description": "智能客服 Agent 核心对话函数",
+  "main": "index.js",
+  "dependencies": {
+    "@cloudbase/node-sdk": "^3.16.0"
+  }
+}

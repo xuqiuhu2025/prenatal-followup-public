@@ -1,0 +1,37 @@
+[
+  {
+    "file": "previous",
+    "duration": 11.95,
+    "sampleRate": 24000,
+    "peak": 0.634,
+    "rms": 0.101
+  },
+  {
+    "file": "recommended",
+    "duration": 13.08,
+    "sampleRate": 24000,
+    "peak": 0.635,
+    "rms": 0.101
+  },
+  {
+    "file": "slower",
+    "duration": 14.14,
+    "sampleRate": 24000,
+    "peak": 0.638,
+    "rms": 0.101
+  },
+  {
+    "file": "xiaoyi",
+    "duration": 13.06,
+    "sampleRate": 24000,
+    "peak": 0.497,
+    "rms": 0.076
+  },
+  {
+    "file": "yunxi",
+    "duration": 13.13,
+    "sampleRate": 24000,
+    "peak": 0.641,
+    "rms": 0.056
+  }
+]

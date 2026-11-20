@@ -1,0 +1,51 @@
+{
+  "source": "recommended.mp3",
+  "source_sha256": "20d999bcf49c6a380ab80040eb7dbc9067e8c5c1a64eb1b321e595d3799871bf",
+  "voice": "zh-CN-XiaoxiaoNeural",
+  "rate": "-5%",
+  "output": "recommended-telephone-preview.wav",
+  "steps": [
+    "MP3 to 8 kHz mono signed 16-bit PCM, matching speech.speakPcm",
+    "G.711 mu-law encode/decode",
+    "PCM WAV for playback"
+  ],
+  "includes_network_or_handset": false,
+  "notes": "Local codec preview only; not a recorded phone call. No network loss, jitter, microphone or handset effects simulated.",
+  "seconds": 13.08,
+  "peak": 0.5741,
+  "sample_rate": 8000,
+  "channels": 1,
+  "bytes": 209358,
+  "existing_samples_decoded": [
+    {
+      "file": "previous.mp3",
+      "seconds": 11.952,
+      "sample_rate": 24000,
+      "peak": 0.6335
+    },
+    {
+      "file": "recommended.mp3",
+      "seconds": 13.08,
+      "sample_rate": 24000,
+      "peak": 0.6355
+    },
+    {
+      "file": "slower.mp3",
+      "seconds": 14.136,
+      "sample_rate": 24000,
+      "peak": 0.6383
+    },
+    {
+      "file": "xiaoyi.mp3",
+      "seconds": 13.056,
+      "sample_rate": 24000,
+      "peak": 0.497
+    },
+    {
+      "file": "yunxi.mp3",
+      "seconds": 13.128,
+      "sample_rate": 24000,
+      "peak": 0.6411
+    }
+  ]
+}

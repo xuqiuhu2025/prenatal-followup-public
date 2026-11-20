@@ -1,0 +1,51 @@
+{
+  "createdAt": "2026-11-13T11:24:49.314Z",
+  "text": "您好，我是中心的AI随访助手。现在方便聊几句吗？这阵子您身体恢复得怎么样？没关系，记不清的内容可以先放一放。",
+  "samples": [
+    {
+      "id": "previous",
+      "label": "原设置 · 晓晓 +4%",
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "+4%",
+      "file": "previous.mp3",
+      "bytes": 71712,
+      "synthesisMs": 1928
+    },
+    {
+      "id": "recommended",
+      "label": "推荐 · 晓晓舒缓女声",
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-5%",
+      "file": "recommended.mp3",
+      "bytes": 78480,
+      "synthesisMs": 609
+    },
+    {
+      "id": "slower",
+      "label": "更慢 · 晓晓女声",
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-12%",
+      "file": "slower.mp3",
+      "bytes": 84816,
+      "synthesisMs": 801
+    },
+    {
+      "id": "xiaoyi",
+      "label": "对比 · 晓伊女声",
+      "voice": "zh-CN-XiaoyiNeural",
+      "rate": "-5%",
+      "file": "xiaoyi.mp3",
+      "bytes": 78336,
+      "synthesisMs": 1443
+    },
+    {
+      "id": "yunxi",
+      "label": "对比 · 云希男声",
+      "voice": "zh-CN-YunxiNeural",
+      "rate": "-5%",
+      "file": "yunxi.mp3",
+      "bytes": 78768,
+      "synthesisMs": 1412
+    }
+  ]
+}

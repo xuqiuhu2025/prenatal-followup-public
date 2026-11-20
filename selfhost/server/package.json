@@ -1,0 +1,19 @@
+{
+  "name": "smart-cs-server",
+  "version": "1.0.0",
+  "description": "智能客服 Agent 自托管服务（Express + PostgreSQL + new-api LLM）",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "msedge-tts": "^2.1.1",
+    "node-cron": "^3.0.3",
+    "pg": "^8.12.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.16",
+    "playwright": "^1.65.0"
+  }
+}

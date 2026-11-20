@@ -1,0 +1,9 @@
+; Include this context in the Asterisk dialplan after the hospital SIP trunk is configured.
+; AudioSocket carries raw PCM: keep this route and the AMI/media sockets on a private network.
+[followup-agent]
+exten => s,1,NoOp(Hospital follow-up call ${FOLLOWUP_ID})
+ same => n,Set(TIMEOUT(absolute)=${FOLLOWUP_LIMIT})
+ same => n,Answer()
+ same => n,Wait(0.5)
+ same => n,AudioSocket(${FOLLOWUP_ID},${FOLLOWUP_MEDIA})
+ same => n,Hangup()

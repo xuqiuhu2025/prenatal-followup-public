@@ -1,0 +1,7 @@
+[
+  { "orderId": "SO10001", "nickname": "示例用户A", "items": "云舟无线降噪耳机 Pro", "amount": 399, "status": "已发货", "logistics": "顺丰速运 SF1234567890，预计明日送达", "createdAt": 1761000000000 },
+  { "orderId": "SO10002", "nickname": "示例用户B", "items": "云舟智能手环 6（黑色）", "amount": 249, "status": "已签收", "logistics": "中通快递 7830011223344，已于 10-18 签收", "createdAt": 1760900000000 },
+  { "orderId": "SO10003", "nickname": "示例用户C", "items": "云舟机械键盘 K87 + 鼠标垫套装", "amount": 529, "status": "待发货", "logistics": "仓库拣货中，预计 24 小时内发出", "createdAt": 1761500000000 },
+  { "orderId": "SO10004", "nickname": "示例用户D", "items": "云舟车载充电器 65W", "amount": 99, "status": "已签收", "logistics": "京东物流 JD6677889900，已于 10-10 签收", "createdAt": 1760600000000 },
+  { "orderId": "SO10005", "nickname": "示例用户E", "items": "云舟蓝牙音箱 Mini（白色）", "amount": 159, "status": "运输中", "logistics": "圆通速递 YT4455667788，包裹已到达【杭州转运中心】", "createdAt": 1761300000000 }
+]

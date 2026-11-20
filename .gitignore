@@ -1,0 +1,63 @@
+# Dependencies and generated caches
+node_modules/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+# Real environment configuration; only placeholder templates belong in Git
+.env
+.env.*
+*.env
+*.env.*
+!.env.example
+!.env.*.example
+!*.env.example
+!*.env.*.example
+
+# Local archives, credentials, runtime data, models, and call recordings
+.backups/
+backups/
+/data/
+/selfhost/data/
+/selfhost/models/
+/selfhost/telephony/softphone/data/
+recordings/
+credentials.json
+services.env*
+public-phone.json
+mobile-provision.json
+mobile-setup.png
+qa-linphonerc*
+linphonerc*
+*.pem
+*.key
+*.p12
+*.pfx
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.sql.gz
+*.tar
+*.tar.gz
+*.tgz
+*.bak
+*.log
+
+# Local editor and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local patient imports and exports
+/patient-imports/
+/patient-exports/
+/private/

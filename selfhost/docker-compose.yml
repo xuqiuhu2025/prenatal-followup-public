@@ -1,0 +1,84 @@
+services:
+  cs-db:
+    image: postgres:16-alpine
+    container_name: smart-cs-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: csdb
+      POSTGRES_USER: cs
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    volumes:
+      - cs-pgdata:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cs -d csdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  cs-app:
+    build: .
+    container_name: smart-cs-app
+    restart: unless-stopped
+    depends_on:
+      cs-db:
+        condition: service_healthy
+    ports:
+      - "28848:3000"
+      - "28849:3443"
+      - "${TELEPHONY_MEDIA_PUBLISH:-127.0.0.1:9092:9092}"
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgres://cs:${PG_PASSWORD}@cs-db:5432/csdb
+      LLM_BASE: ${LLM_BASE}
+      LLM_KEY: ${LLM_KEY}
+      LLM_MODEL: ${LLM_MODEL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      ASR_URL: http://cs-asr:8000
+      TTS_URL: http://host.docker.internal:28852
+      FOLLOWUP_VOICE: ${FOLLOWUP_VOICE:-xiaoxiao}
+      FOLLOWUP_VOICE_SPEED: ${FOLLOWUP_VOICE_SPEED:-calm}
+      TELEPHONY_ENABLED: ${TELEPHONY_ENABLED:-0}
+      AMI_HOST: ${AMI_HOST:-host.docker.internal}
+      AMI_PORT: ${AMI_PORT:-5038}
+      AMI_USERNAME: ${AMI_USERNAME:-}
+      AMI_SECRET: ${AMI_SECRET:-}
+      TELEPHONY_TRUNK: ${TELEPHONY_TRUNK:-}
+      TELEPHONY_CALLER_ID: ${TELEPHONY_CALLER_ID:-}
+      TELEPHONY_DIAL_PREFIX: ${TELEPHONY_DIAL_PREFIX:-}
+      TELEPHONY_MEDIA_HOST: 0.0.0.0
+      TELEPHONY_MEDIA_PORT: 9092
+      TELEPHONY_MEDIA_TARGET: ${TELEPHONY_MEDIA_TARGET:-cs-app:9092}
+      TELEPHONY_MEDIA_PEERS: ${TELEPHONY_MEDIA_PEERS:-127.0.0.1}
+      TELEPHONY_TEST_NUMBERS: ${TELEPHONY_TEST_NUMBERS:-}
+      TELEPHONY_CENTER_NAME: ${TELEPHONY_CENTER_NAME:-产前筛查与诊断中心}
+      TELEPHONY_RING_SECONDS: ${TELEPHONY_RING_SECONDS:-30}
+      TELEPHONY_MAX_SECONDS: ${TELEPHONY_MAX_SECONDS:-480}
+      TELEPHONY_CONCURRENCY: ${TELEPHONY_CONCURRENCY:-1}
+      TELEPHONY_START_HOUR: ${TELEPHONY_START_HOUR:-9}
+      TELEPHONY_END_HOUR: ${TELEPHONY_END_HOUR:-18}
+      TELEPHONY_VAD_RMS: ${TELEPHONY_VAD_RMS:-600}
+      TELEPHONY_SILENCE_MS: ${TELEPHONY_SILENCE_MS:-800}
+      HTTPS_PORT: 3443
+      CERT_DIR: /certs
+    volumes:
+      - cs-certs:/certs
+    command: >
+      sh -c "if [ ! -f /certs/selfsigned.key ]; then openssl req -x509 -newkey rsa:2048 -nodes -keyout /certs/selfsigned.key -out /certs/selfsigned.crt -days 3650 -subj /CN=smart-cs; fi && node index.js"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  cs-asr:
+    build: ./asr
+    container_name: smart-cs-asr
+    restart: unless-stopped
+    volumes:
+      - ./models/asr-model:/models:ro
+    deploy:
+      resources:
+        limits:
+          memory: 1500M
+
+volumes:
+  cs-pgdata:
+  cs-certs:
